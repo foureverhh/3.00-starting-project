@@ -14,6 +14,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.TestPropertySource;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 @SpringBootTest(classes = MvcTestingExampleApplication.class)
 @TestPropertySource("/application.properties")
@@ -49,5 +51,12 @@ public class StudentAndGradeStudentTest {
     public void isStudentAvailable() {
         assertTrue(studentService.checkIfStudentIsNull(1));
         assertFalse(studentService.checkIfStudentIsNull(0));
+    }
+
+    @Test
+    public void deleteStudentByIdTest() {
+        assertTrue(studentDao.findById(1).isPresent());
+        studentService.deleteStudentById(1);
+        assertFalse(studentDao.findById(1).isPresent());
     }
 }
