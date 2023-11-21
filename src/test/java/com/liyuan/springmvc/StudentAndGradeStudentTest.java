@@ -9,12 +9,14 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.jdbc.Sql;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @SpringBootTest(classes = MvcTestingExampleApplication.class)
@@ -58,5 +60,26 @@ public class StudentAndGradeStudentTest {
         assertTrue(studentDao.findById(1).isPresent());
         studentService.deleteStudentById(1);
         assertFalse(studentDao.findById(1).isPresent());
+    }
+
+    @Test
+    public void getGradeBookService() {
+        Iterable<CollegeStudent> collegeStudentIterable = studentService.getGradeBook();
+        List<CollegeStudent> collegeStudents = new ArrayList<>();
+        for (CollegeStudent collegeStudent : collegeStudentIterable) {
+            collegeStudents.add(collegeStudent);
+        }
+        assertEquals(1, collegeStudents.size());
+    }
+    @Sql("/insertData.sql") // get sql from /main/resources
+    @Test
+    public void sqlInsertion() {
+        Iterable<CollegeStudent> collegeStudentIterable = studentService.getGradeBook();
+        List<CollegeStudent> collegeStudents = new ArrayList<>();
+        for (CollegeStudent collegeStudent : collegeStudentIterable) {
+            collegeStudents.add(collegeStudent);
+        }
+        //1 from setup, the other 5 from insertData.sql
+        assertEquals(6, collegeStudents.size());
     }
 }
