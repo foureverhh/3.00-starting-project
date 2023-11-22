@@ -6,9 +6,11 @@ import com.luv2code.springmvc.repository.StudentDao;
 import com.luv2code.springmvc.service.StudentAndGradeService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.jdbc.Sql;
@@ -40,6 +42,7 @@ public class StudentAndGradeStudentTest {
 
     @AfterEach
     public void teardown() {
+        // jdbcTemplate.execute("delete from student where id = 1");
         jdbcTemplate.execute("delete from student where id = 1");
     }
     @Test
@@ -68,11 +71,14 @@ public class StudentAndGradeStudentTest {
         List<CollegeStudent> collegeStudents = new ArrayList<>();
         for (CollegeStudent collegeStudent : collegeStudentIterable) {
             collegeStudents.add(collegeStudent);
+            System.out.println(collegeStudent.getId() + " " + collegeStudent.getEmailAddress());
         }
         assertEquals(1, collegeStudents.size());
     }
-    @Sql("/insertData.sql") // get sql from /main/resources
+
+     // get sql from /main/resources
     @Test
+    @Sql("/insertData.sql")
     public void sqlInsertion() {
         Iterable<CollegeStudent> collegeStudentIterable = studentService.getGradeBook();
         List<CollegeStudent> collegeStudents = new ArrayList<>();
