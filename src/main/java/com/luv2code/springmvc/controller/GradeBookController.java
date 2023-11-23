@@ -30,4 +30,11 @@ public class GradeBookController {
 		return "studentInformation";
 		}
 
+	@PostMapping("/")
+	public String addNewStudent(@ModelAttribute("student") CollegeStudent student, Model m) {
+		studentAndGradeService.createStudent(student.getFirstname(), student.getLastname(), student.getEmailAddress());
+		Iterable<CollegeStudent> newCollegeStudents = studentAndGradeService.getGradeBook();
+		m.addAttribute("students", newCollegeStudents);
+		return "index";
+	}
 }
